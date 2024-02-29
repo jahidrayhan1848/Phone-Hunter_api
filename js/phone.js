@@ -7,9 +7,20 @@ const phoneDataLoad= async(searchText)=>{
 }
 
  const displayPhone=(phones)=>{
-    console.log(phones);
-   const phoneContainer = document.getElementById('phone-container');
-   phoneContainer.textContent = '';
+   console.log(phones.length);
+   //  show all button container 
+   const showAllContainer = document.getElementById('show-all-container');
+  //  console.log(showAllContainer);
+   if (phones.length > 12) {
+    showAllContainer.classList.remove('hidden')
+   }
+   else {
+     showAllContainer.classList.add('hidden')
+    }
+    phones=phones.slice(0,12)
+  //  display 12 phones 
+  const phoneContainer = document.getElementById('phone-container');
+  phoneContainer.textContent = '';
     phones.forEach(phone => {
         // create a div 
         const div=document.createElement('div');
@@ -34,12 +45,25 @@ const phoneDataLoad= async(searchText)=>{
 
         
     });
+   loadingSpinner(false)
+   
 
 }
  
 const handleData = () => {
+  loadingSpinner(true)
   const inputText = document.getElementById("search-text");
   const inputValue = inputText.value;
   phoneDataLoad(inputValue)
+}
+const loadingSpinner = (loading) => {
+  const loadingContainer = document.getElementById('loading-container');
+  if (loading) {
+    loadingContainer.classList.remove('hidden')
+  }
+  else {
+    loadingContainer.classList.add('hidden')
+  }
+
  }
 phoneDataLoad('iphone');
