@@ -1,23 +1,27 @@
 
-const phoneDataLoad= async(searchText)=>{
+const phoneDataLoad= async(searchText,isShowAll)=>{
     const res= await fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`);
     const data= await res.json();
     const phones=data.data
-    displayPhone(phones)
+    displayPhone(phones,isShowAll)
 }
 
- const displayPhone=(phones)=>{
-   console.log(phones.length);
+ const displayPhone=(phones,isShowAll)=>{
+   console.log(phones);
    //  show all button container 
    const showAllContainer = document.getElementById('show-all-container');
   //  console.log(showAllContainer);
-   if (phones.length > 12) {
+   if (phones.length > 12 && !isShowAll) {
     showAllContainer.classList.remove('hidden')
    }
    else {
      showAllContainer.classList.add('hidden')
+   }
+   //  console.log('show all', isShowAll );
+   if (!isShowAll) {
+      
+     phones=phones.slice(0,12)
     }
-    phones=phones.slice(0,12)
   //  display 12 phones 
   const phoneContainer = document.getElementById('phone-container');
   phoneContainer.textContent = '';
@@ -31,8 +35,8 @@ const phoneDataLoad= async(searchText)=>{
                     <div class="card-body">
                       <h2 class="card-title">${phone.phone_name}</h2>
                       <p>If a dog chews shoes whose shoes does he choose?</p>
-                      <div class="card-actions justify-end">
-                        <button class="btn btn-primary">Buy Now</button>
+                      <div class="card-actions justify-center">
+                        <button onClick="showSinglePhoneData('${phone.slug}')" class="btn btn-primary">Show Details</button>
                       </div>
                     </div>
                  
@@ -50,11 +54,12 @@ const phoneDataLoad= async(searchText)=>{
 
 }
  
-const handleData = () => {
+const handleData = (isShowAll) => {
+  // console.log(isShowAll)
   loadingSpinner(true)
   const inputText = document.getElementById("search-text");
   const inputValue = inputText.value;
-  phoneDataLoad(inputValue)
+  phoneDataLoad(inputValue,isShowAll)
 }
 const loadingSpinner = (loading) => {
   const loadingContainer = document.getElementById('loading-container');
@@ -65,5 +70,24 @@ const loadingSpinner = (loading) => {
     loadingContainer.classList.add('hidden')
   }
 
+}
+ 
+// handle showall button 
+const handleShowAll = () => {
+  handleData(true)
+  
+}
+
+// show details single phone
+const showSinglePhoneData = async (id) => {
+  console.log('clicked', id);
+  // data load by single Id 
+  const res =await fetch(`https://openapi.programming-hero.com/api/phone/${id}`);
+  const data =await res.json();
+  console.log(data)
+
+
  }
+
+
 phoneDataLoad('iphone');
