@@ -7,7 +7,7 @@ const phoneDataLoad= async(searchText,isShowAll)=>{
 }
 
  const displayPhone=(phones,isShowAll)=>{
-   console.log(phones);
+  //  console.log(phones);
    //  show all button container 
    const showAllContainer = document.getElementById('show-all-container');
   //  console.log(showAllContainer);
@@ -80,14 +80,39 @@ const handleShowAll = () => {
 
 // show details single phone
 const showSinglePhoneData = async (id) => {
-  console.log('clicked', id);
+  // console.log('clicked', id);
   // data load by single Id 
   const res =await fetch(`https://openapi.programming-hero.com/api/phone/${id}`);
-  const data =await res.json();
-  console.log(data)
+  const data = await res.json();
+  const phone= data.data
+  showDetails(phone)
+  
+  
+  
+}
 
+//  show details on modal \
+const showDetails = (phone) => {
+  console.log(phone)
+  const {image,name,mainFeatures}=phone
+  show_single_data_ByID.showModal()
+  // modal container div 
+  const modalContainer = document.getElementById('model-container');
 
- }
+  modalContainer.innerHTML = `
+      <div class= "text-center w-[268px]">
+     <img src="${image}" alt="">
+      <div class="my-7">
+    <h3  class="font-bold text-3xl">${name}</h3>
+     <p><span>Storage:${mainFeatures.storage}</span></p>
+      </div>
+   </div>
+  
+  `;
+ 
+
+  
+}
 
 
 phoneDataLoad('iphone');
